@@ -1,0 +1,114 @@
+object Form1: TForm1
+  Left = 654
+  Height = 398
+  Top = 109
+  Width = 768
+  Caption = 'Form1'
+  ClientHeight = 398
+  ClientWidth = 768
+  OnDestroy = FormDestroy
+  LCLVersion = '1.8.2.0'
+  object Button1: TButton
+    Left = 344
+    Height = 25
+    Top = 24
+    Width = 168
+    Caption = 'Подключиться'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Memo1: TMemo
+    Left = 61
+    Height = 90
+    Top = 92
+    Width = 619
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 61
+    Height = 60
+    Top = 208
+    Width = 75
+    Caption = 'Выполнить'
+    OnClick = Button2Click
+    TabOrder = 2
+  end
+  object Button4: TButton
+    Left = 61
+    Height = 25
+    Top = 312
+    Width = 75
+    Caption = 'Commit'
+    OnClick = Button4Click
+    TabOrder = 3
+  end
+  object SpinEdit1: TSpinEdit
+    Left = 280
+    Height = 28
+    Top = 208
+    Width = 122
+    MaxValue = 10000
+    TabOrder = 4
+    Value = 100
+  end
+  object Label1: TLabel
+    Left = 200
+    Height = 16
+    Top = 208
+    Width = 37
+    Caption = 'Строк'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 200
+    Height = 16
+    Top = 252
+    Width = 80
+    Caption = 'Работаем до'
+    ParentColor = False
+  end
+  object SpinEdit2: TSpinEdit
+    Left = 280
+    Height = 28
+    Top = 248
+    Width = 122
+    TabOrder = 5
+    Value = 21
+  end
+  object MySQL57Connection1: TMySQL57Connection
+    Connected = False
+    LoginPrompt = False
+    DatabaseName = 'mydb_sushirest'
+    KeepConnection = False
+    Params.Strings = (
+      'Port=3306'
+    )
+    Password = 'sj98slk7'
+    Transaction = SQLTransaction1
+    UserName = 'root'
+    CharSet = 'utf8'
+    HostName = 'localhost'
+    SkipLibraryVersionCheck = False
+    left = 16
+    top = 8
+  end
+  object SQLTransaction1: TSQLTransaction
+    Active = False
+    Database = MySQL57Connection1
+    left = 56
+    top = 8
+  end
+  object SQLQuery1: TSQLQuery
+    FieldDefs = <>
+    Database = MySQL57Connection1
+    Transaction = SQLTransaction1
+    Params = <>
+    left = 136
+    top = 8
+  end
+  object DataSource1: TDataSource
+    DataSet = SQLQuery1
+    left = 96
+    top = 8
+  end
+end

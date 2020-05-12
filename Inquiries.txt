@@ -1,0 +1,75 @@
+﻿Востребованные позиции по районам города
+Для первого района (Центральный)
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id=1   GROUP BY products.product_id  ORDER BY products.product_id;
+Для второго района (Советский)
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id=2   GROUP BY products.product_id  ORDER BY products.product_id;
+Для третьего района (Железнодорожный)
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id=3   GROUP BY products.product_id  ORDER BY products.product_id;
+Для четвертого района (Новобелицкий)
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id=4   GROUP BY products.product_id  ORDER BY products.product_id;
+
+Самые популярные товары по районам (первые 20 позиций)
+Для первого района
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id 						
+JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id=1  GROUP BY products.product_id  ORDER BY cnt DESC LIMIT 20;						
+Для второго района
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id 						
+JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id2  GROUP BY products.product_id  ORDER BY cnt DESC LIMIT 20;						
+Для третьего района
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id 						
+JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id=3  GROUP BY products.product_id  ORDER BY cnt DESC LIMIT 20;						
+Для четвертого района
+SELECT products.pName, count(*) as cnt from products JOIN basket on basket.product_id=products.product_id 						
+JOIN orders ON (orders.order_id=basket.order_id) AND orders.district_id=4  GROUP BY products.product_id  ORDER BY cnt DESC LIMIT 20;						
+
+Вывод стоимости всех заказов
+SELECT order_id,sum(price*quantity) FROM basket,prices WHERE basket.product_id=prices.product_id GROUP BY order_id ORDER BY order_id;
+Вывод стоимости конкретного заказа
+SELECT order_id,sum(price*quantity) FROM basket,prices WHERE basket.product_id=prices.product_id AND order_id = 1;
+
+Вывод таблицы с данными о времени доставки заказов в определенном интервале (6 месяцев)
+Для первого района
+SELECT couriers.lastname, couriers.firstname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, kitchens.dateDone) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=1) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2020-07-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN couriers ON couriers.courier_id=kitchens.courier_id ;
+Для второго района
+SELECT couriers.lastname, couriers.firtname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, kitchens.dateDone) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=2) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2020-07-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN couriers ON couriers.courier_id=kitchens.courier_id ;
+Для третьего района
+SELECT couriers.lastname, couriers.firtname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, kitchens.dateDone) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=3) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2020-07-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN couriers ON couriers.courier_id=kitchens.courier_id ;
+Для четвертого района
+SELECT couriers.lastname, couriers.firtname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, kitchens.dateDone) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=4) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2020-07-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN couriers ON couriers.courier_id=kitchens.courier_id ;
+
+Оценка работы курьеров на основании обратной связи от клиентов
+SELECT couriers.lastname, couriers.firtname, avg(stars) FROM  reviewcouriers JOIN couriers on couriers.courier_id=reviewcouriers.courier_id GROUP BY reviewcouriers.courier_id; 
+
+Оценка работы кухни на основании обратной связи от клиентов
+SELECT customers.lastname, customers.firstname, avg(stars) FROM  reviewkitchen 
+JOIN customers on customers.customer_id=reviewkitchen.customer_id GROUP BY customers.customer_id; 
+
+Анализ суммы заказов  за 2020 год 
+select distName, sum(quantity*price) as sqp from basket cross join prices on basket.product_id=prices.product_id left join orders on orders.order_id=basket.order_id and orders.orderDate between "2020-01-01 00:00:00" AND  "2021-01-01 00:00:00"
+join districts on districts.district_id=orders.district_id group by districts.district_id order by sqp desc ;		
+		
+Оценка времени обработки заказа до момента вручения клиенту
+Для первого района
+SELECT customers.lastname, customers.firstname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, orderDate) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=1) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2021-01-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN customers ON customers.customer_id=orders.customer_id ;					
+Для второго района					
+SELECT customers.lastname, customers.firstname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, orderDate) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=2) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2021-01-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN customers ON customers.customer_id=orders.customer_id ;						
+Для третьего района					
+SELECT customers.lastname, customers.firstname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, orderDate) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=3) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2021-01-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN customers ON customers.customer_id=orders.customer_id ;	
+Для четвертого района					
+SELECT customers.lastname, customers.firstname, orders.order_id, orders.orderDate,TIMEDIFF(bank.dateTransaction, orderDate) as timedone  from bank JOIN orders on (orders.order_id=bank.order_id) AND (orders.district_id=4) 
+AND bank.dateTransaction BETWEEN "2020-01-01" AND "2021-01-01" JOIN kitchens ON kitchens.kitchen_id=orders.kitchen_id
+JOIN customers ON customers.customer_id=orders.customer_id ;						
